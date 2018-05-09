@@ -1,0 +1,36 @@
+#include <Keypad.h>
+#include "SevSeg.h"
+const byte ROWS = 4;
+const byte COLS = 4;
+const int led[]={11,12,13,14,15,16,17};
+const byte num[10]={B00111111,B00000110,B01011011,B01001111,B01100110,B01101101,B01111101,B00000111,B01111111,B01101111};
+char keys[ROWS][COLS] = {{'F', 'E', 'D', 'C'}, {'B','3','6', '9'},{'A', '2', '5', '8'}, {'0', '1', '4', '7'}};
+
+byte rowPins[ROWS] = {5, 4, 3, 2};
+
+byte colPins[COLS] = {10 ,9 ,8,7};
+Keypad keypad =Keypad( makeKeymap(keys), rowPins,colPins, ROWS, COLS );
+void setup(){
+Serial.begin(9600);
+for(int i=0;i<7;i++)
+pinMode(led[i],OUTPUT);
+}
+void loop()
+{
+
+  
+char key = keypad.getKey();
+int Value=key-48;
+if (key != NO_KEY)
+{
+Serial.println(key);
+for(int i=0;i<7;i++)
+{
+  
+  if(bitRead(num[Value],i))
+  digitalWrite(led[i],1);
+  else
+  digitalWrite(led[i],0);
+}
+}
+}
